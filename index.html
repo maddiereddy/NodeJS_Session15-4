@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <head>
+        <script src='//code.jquery.com/jquery-1.7.2.min.js'></script>
+        <script src='//localhost:3000/socket.io/socket.io.js'></script>
+        <script>    
+          var socket = io.connect();
+
+          socket.on('message', function(data){
+            $('#message').text(data.message);
+          });
+
+          socket.on('stats', function(data) {
+            $('#stats').text('Number of clients now : ' + data.numClients);
+          });
+          
+          socket.on('date', function(data){
+            $('#date').text(data.date);
+          });
+
+          $(document).ready(function(){
+            $('#text').keypress(function(e){
+              socket.emit('client_data', {'letter': String.fromCharCode(e.charCode)});
+            });
+          });
+        </script>
+    </head>
+    <body>
+        <h3 id="message"></h3>
+        <div id="stats"></div>
+        <div id="date"></div>
+        <br />
+        <textarea id="text"></textarea>
+    </body>
+</html>
